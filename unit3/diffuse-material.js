@@ -22,10 +22,13 @@ function init() {
 	camera = new THREE.PerspectiveCamera( 45, canvasRatio, 1, 80000 );
 	camera.position.set( -300, 300, -1000 );
 	camera.lookAt(0,0,0);
+
 	// LIGHTS
 
-	ambientLight = new THREE.AmbientLight( 0xFFFFFF );
-
+	// yiddi: https://threejs.org/docs/index.html#api/en/lights/AmbientLight
+	// This light globally illuminates all objects in the scene equally
+	// This light cannot be used to cast shadows as it does not have a direction
+	ambientLight = new THREE.AmbientLight( 0xFFFFFF ); // soft white light
 	light = new THREE.DirectionalLight( 0xFFFFFF, 0.7 );
 	light.position.set( -800, 900, 300 );
 
@@ -45,8 +48,14 @@ function init() {
 
 function createBall() {
 	// Do not change the color itself, change the material and use the ambient and diffuse components.
-	var material = new THREE.MeshBasicMaterial( { color: 0x80FC66, shading: THREE.FlatShading } );
+	// var material = new THREE.MeshBasicMaterial( { color: 0x80FC66, shading: THREE.FlatShading } );
+    // yiddi
+
+	var material = new THREE.MeshLambertMaterial( { color: 0x80FC66, shading: THREE.FlatShading } );
+	var ka = 0.3;
+	material.ambient.setRGB( material.color.r * ka, material.color.g * ka, material.color.b * ka );
 	var sphere = new THREE.Mesh( new THREE.SphereGeometry( 400, 64, 32 ), material );
+
 	return sphere;
 }
 
